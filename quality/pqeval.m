@@ -7,6 +7,8 @@ function ODG = pqeval(ref,tes,fs)
 %  tes : test signal
 %  fs  : sampling frequency
 
+global tmpnam;
+
 rfile = [tmpnam,'rr.wav'];
 rfile48 = [tmpnam,'rw.wav'];
 tfile = [tmpnam,'tr.wav'];
@@ -21,17 +23,18 @@ tes = tes(1:hmin,:);
 ODG = zeros(1,ch);
 for k = 1:ch
 	wavwrite(ref(:,k),fs,rfile);
-	Resamp_code = sprintf('ResampAudio -s 48000 %s %s >& /dev/null',...
+	Resamp_code = sprintf('ResampAudio -s 48000 %s %s > nul',...
 		 rfile, rfile48);
 	system(Resamp_code);
 	
 	wavwrite(tes(:,k),fs,tfile);
-	Resamp_code = sprintf('ResampAudio -s 48000 %s %s >& /dev/null ;',...
+	Resamp_code = sprintf('ResampAudio -s 48000 %s %s > nul',...
 		 tfile, tfile48);
 	system(Resamp_code);
-	PQeval_code = sprintf('PQevalAudio %s %s | grep Grade | cut -c 29- ;',...
+	PQeval_code = sprintf('PQevalAudio %s %s | grep Grade',...
 		 rfile48,tfile48);
-	[~,res] = system(PQeval_code)
+	[~,res] = system(PQeval_code);
+    res = strsplit(res); res = res{end - 1};
 	ODG(:,k) = sscanf(res,'%f');
 end
 system(['rm ',rfile,' ',tfile,' ',rfile48,' ',tfile48]);

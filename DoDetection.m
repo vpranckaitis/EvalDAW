@@ -20,18 +20,17 @@ for ite = 1:Nite
 	y = astego(seg_1:seg_end,ich);
 
 	% Detection Code here
-	% [m_stego(:,ite)] = detection_code(y,....);
-	% m_stego = decode(y,fs,m,varargin);
+% 	[m_stego(:,ite)] = detection_code(y,....);
+	m_stego = decode(y,fs,m,varargin{:});
 	
-	% BEGIN == fix for tsedec == 
-	wavwrite(y,fs,'tseenc.wav');	
-	[m_stego, idx, cn, flag] = tse_dec;
-	% END == fix for tsedec ==
+% 	% BEGIN == fix for tsedec == 
+% 	wavwrite(y,fs,'tseenc.wav');	
+% 	[m_stego, idx, cn, flag] = d;
+% 	% END == fix for tsedec ==
 	
 	lengthm = min(length(m),length(m_stego));
 
 	er(ite) = 100 * length(find(m(1:lengthm)-m_stego(1:lengthm))) / lengthm; 
 end
 er = mean(er);
-er
-input('');
+end
