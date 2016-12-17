@@ -63,7 +63,7 @@ y.echo = addecho(y.orig,fs,100,6);
 y.mp3t = mp3encdec(y.mp3o,fs,128);
 
 % mp4aac
-y.mp4a = mp4encdec(y.orig,fs,96);
+y.mp4a = mp4encdec(y.orig,fs,96000);
 
 % DA/AD 
 y.daad = daad(y.orig,fs,-80,-2,0.999);

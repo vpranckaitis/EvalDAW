@@ -10,7 +10,7 @@ global tmpnam;
 
 [c, ch] = size(x);
 wfile = [tmpnam, 'w.wav'];
-rfile = [tmpnam, 'r.mp3'];
+rfile = [tmpnam, 'r.mp4'];
 
 wavwrite(x, fs, wfile);
 enc_code = sprintf('neroAacEnc -br %g -if %s -of %s 2> nul',kbps,wfile,rfile);

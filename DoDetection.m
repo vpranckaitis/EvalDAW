@@ -10,14 +10,7 @@ function er = DoDetection(astego,fs,m,Nite,varargin)
 [h,ch] = size(astego);
 for ite = 1:Nite
 	ich = randperm(ch,1);
-	if 0
-		seg_1 = randperm(fs*15,1);
-	else
-		seg_1 = 1;
-	end
-	seg_end = seg_1+fs*30-1;
-	%%	seg_end = seg_1+fs*45-1;
-	y = astego(seg_1:seg_end,ich);
+	y = astego(:,ich);
 
 	% Detection Code here
 % 	[m_stego(:,ite)] = detection_code(y,....);
