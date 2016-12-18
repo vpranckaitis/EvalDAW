@@ -9,11 +9,12 @@ global tmpnam;
 wfile = [tmpnam, 'w.wav'];
 rfile = [tmpnam, 'r.mp3'];
 
-wavwrite(x, fs, wfile);
+audiowrite(wfile, x, fs);
 enc_code = sprintf('lame --silent --cbr -q 0 -m j -b %g %s %s',kbps,wfile,rfile);
 system(enc_code);
 dec_code = sprintf('lame --silent --decode %s %s',rfile,wfile);
 system(dec_code);
-y = wavread(wfile);
+
+y = audioread(wfile);
 system(['rm ', wfile, ' ', rfile]);
 fprintf('====mp3encdec end===\n\n');

@@ -6,10 +6,10 @@ function [ results, failed ] = run_phase_coding_tests()
   global algorithm_id;
   algorithm_id = 0;
   
-  for segment_size=1024*[1,2,4,8]
+  for segment_size=1024*[1]%,2,4,8]
     results(segment_size) = [];
     failed(segment_size) = 0;
-    for audio_name=[66,69,70]
+    for audio_name=[66]%,69,70]
         
       sample_rate = 44100;
       start_pos = floor(3*sample_rate / segment_size);
@@ -28,5 +28,22 @@ function [ results, failed ] = run_phase_coding_tests()
       end
     end
   end
-end
 
+  for k=cell2mat(keys(results))
+      display(k);
+      vals = results(k);
+      fn = fieldnames(vals(1));
+      for j = 1:length(fn)
+        f = fn(j);
+        f = f{1};
+        ss = [];
+        for i=1:length(vals)
+            s = vals(i).(f);
+            ss = [ss s];
+        end
+        display(sprintf('%s\t%6.2f\t%6.2f\t%6.2f\t%6.2f\t%6.2f', ...
+            f, min(ss), max(ss), mean(ss), median(ss), std(ss)));
+      end
+  end
+
+end

@@ -22,19 +22,20 @@ ref = ref(1:hmin,:);
 tes = tes(1:hmin,:);
 ODG = zeros(1,ch);
 for k = 1:ch
-	wavwrite(ref(:,k),fs,rfile);
+    audiowrite(rfile, ref(:,k), fs);
 	Resamp_code = sprintf('ResampAudio -s 48000 %s %s > nul',...
 		 rfile, rfile48);
 	system(Resamp_code);
-	
-	wavwrite(tes(:,k),fs,tfile);
+
+    audiowrite(tfile, tes(:,k), fs);
 	Resamp_code = sprintf('ResampAudio -s 48000 %s %s > nul',...
 		 tfile, tfile48);
 	system(Resamp_code);
 	PQeval_code = sprintf('PQevalAudio %s %s | grep Grade',...
 		 rfile48,tfile48);
-	[~,res] = system(PQeval_code);
+	[~,res] = system(PQeval_code)
     res = strsplit(res); res = res{end - 1};
+%     a = sscanf(res,'%f');
 	ODG(:,k) = sscanf(res,'%f');
 end
 system(['rm ',rfile,' ',tfile,' ',rfile48,' ',tfile48]);

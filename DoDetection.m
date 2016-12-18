@@ -22,8 +22,14 @@ for ite = 1:Nite
 % 	% END == fix for tsedec ==
 	
 	lengthm = length(text2bits(m));
+    
+    if length(m_stego) >= length(m)
+        m_stego_adjusted = m_stego(1, 1 : length(m));
 
-	er(ite) = 100 * length(find(text2bits(m)-text2bits(m_stego))) / lengthm; 
+        er(ite) = 100 * length(find(text2bits(m)-text2bits(m_stego_adjusted))) / lengthm;
+    else
+        er(ite) = 100;
+    end
 end
 er = mean(er);
 end

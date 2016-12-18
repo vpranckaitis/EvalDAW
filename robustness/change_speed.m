@@ -8,10 +8,10 @@ wfile = [tmpnam, 'w.wav'];
 rfile = [tmpnam, 'r.wav'];
 
 for k=1:ch
-	wavwrite(x(:,k),fs,rfile);
+    audiowrite(rfile, x(:,k), fs);
 	resamp_code = sprintf('ResampAudio -s %d %s %s > nul', round(fs/ratio), rfile, wfile);
 	system(resamp_code);
-	tmp = wavread(wfile);
+    tmp = audioread(wfile);
 	y(1:length(tmp),k) = tmp;
 end
 system(['rm ', wfile, ' ', rfile]);

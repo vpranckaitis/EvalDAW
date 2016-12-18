@@ -5,7 +5,13 @@ function [y] = echo_encode(x, data, Fs, sample_size, zero_delay,...
 
     x = double(x);
 
+    length_in_s = round(length(x) / (Fs * sample_size / 8));
     watermark_size = size(watermark_bits, 1);
+    
+    if watermark_size >= length_in_s * sample_size,
+        y = x;
+        return
+    end
 
     % divide up a signal into windows
     zero_delay_signal = single_echo(x, Fs, zero_delay, ...

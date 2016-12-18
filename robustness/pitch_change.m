@@ -10,10 +10,10 @@ wfile = [tmpnam, 'w.wav'];
 rfile = [tmpnam, 'r.wav'];
 
 for k=1:ch
-  wavwrite(sig(:,k), sf, wfile);
+  audiowrite(wfile, sig(:,k), sf);
   system(sprintf('picola %s %s %g', wfile, rfile, ratio));
   system(sprintf('ResampAudio -s %d %s %s > nul', round(sf/ratio), rfile, wfile));
-  tmp = wavread(wfile);
+  tmp = audioread(wfile);
   out(1:length(tmp),k) = tmp;
 end
 system(['rm ', wfile, ' ', rfile]);

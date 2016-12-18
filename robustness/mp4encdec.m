@@ -12,11 +12,12 @@ global tmpnam;
 wfile = [tmpnam, 'w.wav'];
 rfile = [tmpnam, 'r.mp4'];
 
-wavwrite(x, fs, wfile);
+audiowrite(wfile, x, fs);
 enc_code = sprintf('neroAacEnc -br %g -if %s -of %s 2> nul',kbps,wfile,rfile);
 system(enc_code);
 dec_code = sprintf('neroAacDec -if %s -of %s 2> nul',rfile,wfile);
 system(dec_code);
-y = wavread(wfile);
+
+y = audioread(wfile);
 system(['rm ', wfile, ' ', rfile]);
 fprintf('====mp4encdec end===\n\n');

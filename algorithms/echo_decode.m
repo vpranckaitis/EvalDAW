@@ -27,10 +27,15 @@ function [message] = echo_decode(y, Fs, sample_size, zero_delay, one_delay)
         % Only process the signal if the segment (vector y) contains some
         % non-zero values. There will be no echoes in an empty segment :)
         if any(window)
-            c = abs(rceps(window));
+            try 
+                c = abs(rceps(window));
 
-            zero_delay_signal(pos) = c(round(zero_delay * Fs) + 1);
-            one_delay_signal(pos) = c(round(one_delay * Fs) + 1);
+                zero_delay_signal(pos) = c(round(zero_delay * Fs) + 1);
+                one_delay_signal(pos) = c(round(one_delay * Fs) + 1);
+            catch
+                message = '';
+                return
+            end
         end
 
         pos = pos + round(nw / segment_transition_time);    % next window

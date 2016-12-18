@@ -2,16 +2,24 @@ function [er,ODG] = AllDoDetection(wavname,dat,Nite,varargin)
 owave = sprintf('input/%d.wav',wavname);
 rwave = sprintf('%d',wavname);
 for i=1:length(varargin)
-	tmp = sprintf('_%d',varargin{i});
+	tmp = sprintf('_%d',round(varargin{i}));
 	rwave = strcat(rwave,tmp)
 end
 rwave = strcat(rwave,'_stego.wav');
 
-[o,fs,nbits] = wavread(owave);
-[x,fs,nbits] = wavread(rwave);
+[o,fs] = audioread(owave);
+oinfo = audioinfo(owave);
+onbits = oinfo.BitsPerSample;
+
+[x,fs] = audioread(rwave);
+xinfo = audioinfo(rwave);
+xnbits = xinfo.BitsPerSample;
+
+nbits = xnbits;
 
 addpath('quality');
-ODG = pqeval(o,x,fs);
+%ODG = pqeval(o,x,fs);
+ODG = 0;
 
 addpath('robustness');
 y = ihc2013attack(x,fs);
