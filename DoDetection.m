@@ -21,9 +21,22 @@ for ite = 1:Nite
 % 	[m_stego, idx, cn, flag] = d;
 % 	% END == fix for tsedec ==
 	
-	lengthm = min(length(m),length(m_stego));
+	lengthm = length(text2bits(m));
 
-	er(ite) = 100 * length(find(m(1:lengthm)-m_stego(1:lengthm))) / lengthm; 
+	er(ite) = 100 * length(find(text2bits(m)-text2bits(m_stego))) / lengthm; 
 end
 er = mean(er);
+end
+
+function Y = de2bi(X)
+    Y = zeros(size(X, 1), 8);
+    for i = 1 : size(X, 1)
+        Y(i, :) = bitget(X(i), 8 : -1 : 1);
+    end
+end
+
+function [ textBits ] = text2bits(text)
+    textBytes = unicode2native(text)';
+    textBitsMatrix = de2bi(textBytes);
+    textBits = reshape(textBitsMatrix', length(textBitsMatrix(:)), 1);
 end
