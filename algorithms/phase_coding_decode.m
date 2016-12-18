@@ -1,13 +1,29 @@
-function [message] = phase_coding_decode(y, text_length, segment_size, shift)
-    m = text_length * 8;
+function [message] = phase_coding_decode(y, text_length, segment_size, ...
+    shift)
 
-    Z = fft(y(shift * segment_size + (1 : segment_size)));
+    text_bit_length = text_length * 8;
+
+    % Calculate starting position so that any silence in the begining of 
+    % the recording can be safely ignored
+    start_segment_position = find(input_bits, 1);
+    
+%     Z = fft(y(shift * segment_size + (1 : segment_size)));
+    Z = fft(y(shift * segment_size + (start_segment_position ...
+        : (start_segment_position - 1 + segment_size))));
+
     theta = angle(Z);
 
-    phases = theta((segment_size / 2 - m + 1) : (segment_size / 2));
-    textBits = phases < 0;
+    phases = theta((segment_size / 2 - text_bit_length + 1) ...
+        : (segment_size / 2));
 
-    message = bits2text(textBits);
+    % NOTE: should be '< -(pi / 2) - <some threashold>' if we want to be
+    % completely accurate. But in general terms the below should do just
+    % fine
+    decoded_bit_string = phases < 0;
+
+    % Retrieve the textual representation of the decoded information
+    message = bits2text(decoded_bit_string);
+
 end
 
 function Y = bi2de(X)
@@ -18,7 +34,7 @@ function Y = bi2de(X)
     end
 end
 
-function [ text ] = bits2text(textBits)
+function [text] = bits2text(textBits)
     textBitsMatrix = reshape(textBits, 8, length(textBits) / 8)';
     textBytes = bi2de(textBitsMatrix);
     text = native2unicode(textBytes)';

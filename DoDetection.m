@@ -1,4 +1,4 @@
-function er = DoDetection(astego,fs,m,Nite,varargin)
+function er = DoDetection(astego,fs,nbits,m,Nite,varargin)
 %
 % er = DoDetection(astego,fs,m,Nite)
 %
@@ -14,8 +14,8 @@ for ite = 1:Nite
 
 	% Detection Code here
 % 	[m_stego(:,ite)] = detection_code(y,....);
-	m_stego = decode(y,fs,m,varargin{:});
-	
+	m_stego = decode(y,fs,nbits,m,varargin{:});
+
 % 	% BEGIN == fix for tsedec == 
 % 	wavwrite(y,fs,'tseenc.wav');	
 % 	[m_stego, idx, cn, flag] = d;

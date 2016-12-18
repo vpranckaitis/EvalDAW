@@ -11,7 +11,7 @@ end
 fname_out = strcat(fname_out,'_stego.wav')
 
 for ich = 1:size(x,2)
-	[y(:,ich),err(ich)] = embed(x(:,ich),fs,dat,varargin{:});
+	[y(:,ich),err(ich)] = embed(x(:,ich),fs,nbits,dat,varargin{:});
 	waveval = sprintf('%d.wav',wavname);
 	wavwrite(x(:,ich),fs,nbits,waveval)
 % 	[y(:,ich), encbit] = tse_enc(waveval,dat);
