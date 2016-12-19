@@ -20,16 +20,31 @@ for ite = 1:Nite
 % 	wavwrite(y,fs,'tseenc.wav');	
 % 	[m_stego, idx, cn, flag] = d;
 % 	% END == fix for tsedec ==
-	
-	lengthm = length(text2bits(m));
-    
-    if length(m_stego) >= length(m)
-        m_stego_adjusted = m_stego(1, 1 : length(m));
 
-        er(ite) = 100 * length(find(text2bits(m)-text2bits(m_stego_adjusted))) / lengthm;
-    else
-        er(ite) = 100;
+    m_bits = text2bits(m);
+    m_stego_bits = text2bits(m_stego);
+	
+	lengthm = length(m_bits);
+	lengthm_stego = length(m_stego_bits);
+
+    iterCount = lengthm_stego - lengthm;
+    
+    best_err_coeff = 100;
+    
+    if iterCount == 0
+        iterCount = 1;
     end
+
+    for i = 1 : iterCount
+        m_stego_bits_adjusted = m_stego_bits(i : (i + lengthm - 1), 1);
+        err_coeff = 100 * length(find(m_bits - m_stego_bits_adjusted)) / lengthm;
+    
+        if err_coeff < best_err_coeff
+            best_err_coeff = err_coeff;
+        end
+    end
+
+   er(ite) = best_err_coeff;
 end
 er = mean(er);
 end
